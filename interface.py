@@ -12,15 +12,22 @@ def animacao_final(matriz, posicoes_finais, vetPosicoes):
     largura_janela = colunas * dimensao_celula
     altura_janela = linhas * dimensao_celula
 
-    custos = calculoCustosFinais(vetPosicoes)
+    custo_final, custos = calculoCustosFinais(vetPosicoes)
 
     tela = pygame.display.set_mode((largura_janela, altura_janela))
-    pygame.display.set_caption("Matriz Colorida com Animação")
-
+    pygame.display.set_caption("Animação final do caminho encontrado")
     fonte = pygame.font.SysFont(None, 36)
     cor_texto = (0, 0, 0)
 
+    coordenadas_pretas = [tuple(map(int, pos.split(';'))) for pos in vetPosicoes]
+    
     desenhar_matriz(linhas, colunas, tela, dimensao_celula, matriz)
+    
+    for coord in coordenadas_pretas:
+        linha, coluna = coord
+        pygame.draw.rect(tela, (0, 0, 0), pygame.Rect(coluna * dimensao_celula, linha * dimensao_celula, dimensao_celula, dimensao_celula))
+
+    texto_custo_final = fonte.render(f'Custo final = {custo_final}', True, cor_texto)
 
     pygame.display.flip()
 
@@ -31,29 +38,32 @@ def animacao_final(matriz, posicoes_finais, vetPosicoes):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
         linha, coluna = pos
-
-        pygame.draw.rect(tela, (0, 0, 0), pygame.Rect(coluna * dimensao_celula, linha * dimensao_celula, dimensao_celula, dimensao_celula))
-
+        pygame.draw.rect(tela, (255, 255, 255), pygame.Rect(coluna * dimensao_celula, linha * dimensao_celula, dimensao_celula, dimensao_celula))
         if indice_custo < len(custos):
             custo_atual = custo_atual + custos[indice_custo]
             texto = fonte.render(f'Custo atual = {custo_atual}', True, cor_texto)
             tela.blit(texto, (10, 10))
             indice_custo += 1
-
         pygame.display.flip()
-
         pygame.time.delay(200)
-
         tela.fill((255, 255, 255))
         desenhar_matriz(linhas, colunas, tela, dimensao_celula, matriz)
+        for cord in coordenadas_pretas:
+            if cord != pos:
+                linha, coluna = cord
+                pygame.draw.rect(tela, (0, 0, 0), pygame.Rect(coluna * dimensao_celula, linha * dimensao_celula, dimensao_celula, dimensao_celula))
+            else: 
+                coordenadas_pretas.remove(pos)
+        pygame.draw.rect(tela, (255, 255, 255), pygame.Rect(coluna * dimensao_celula, linha * dimensao_celula, dimensao_celula, dimensao_celula))
+        tela.blit(texto_custo_final, (largura_janela - texto_custo_final.get_width() - 20, 10))
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
 
 def desenhar_matriz(linhas, colunas, tela, dimensao_celula, matriz):
     for i in range(linhas):
@@ -95,8 +105,9 @@ def calculoCustosFinais(vetPos):
     matriz = leituraMatriz()
     custos = []
     i = 0
+    custo_final = 0
     with open('caminho.txt', 'r') as file:
-        with open('custos.txt', 'a') as file:
+        with open('custos_heuristicos.txt', 'w') as file2:
             for linha in file:
                 linha = linha.strip().split(';')
                 linha = linha[::-1]
@@ -108,10 +119,11 @@ def calculoCustosFinais(vetPos):
                     custoTuplaAtual = int(matriz[linha_atual][coluna])
                     heuristica_valor = heuristica(tuplaAtual, tuplaObjetivo)
                     total = custoTuplaAtual + heuristica_valor
-                    custos.append(total)
+                    custo_final = custo_final + custoTuplaAtual
+                    custos.append(custoTuplaAtual)
+                    file2.write(f"Heuristica da posicao {tuplaAtual} para a posicao  objetivo {tuplaObjetivo} = {total}\n")
                 i += 1
-    return custos
-
+    return custo_final, custos
 
 def heuristica(ponto_atual, ponto_destino):
     linha_atual, coluna_atual = ponto_atual
