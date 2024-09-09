@@ -1,5 +1,5 @@
 from a_estrela import aEstrela
-from lerMatriz import leituraMatriz, leituraMatrizPersonalizada
+from lerMatriz import leituraMatriz
 import interface  as it
 
 def configuracao_padrao():
@@ -16,16 +16,12 @@ def configuracao_padrao():
     a = aEstrela(posRick, posCarl, posDaryl, posGlen, posMaggie, saida, matriz)
     a.caminho()
     caminho = it.caminho_final()
-    it.animacao_final(matriz,  caminho)
+    vetPosicoes = [posCarl, posDaryl, posGlen, posMaggie, saida]
+    it.animacao_final(matriz,  caminho, vetPosicoes)
 
 def configuracao_personalizada():
 
-    escolha = input('SELECIONE 1 PARA USAR A MATRIZ PADRÃO OU 2 PARA SUA PRÓPRIA MATRIZ COLOCADA NO ARQUIVO matriz_editavel.txt: ')
-
-    if escolha == 1:
-        matriz = leituraMatriz()
-    else:
-        matriz = leituraMatrizPersonalizada()
+    matriz = leituraMatriz()
 
     posRick = input('DIGITE A POSIÇÃO INICIAL DE RICK SEPARANDO POR PONTO E VIRGULA (EXEMPLO: 1;1): ')  
     posCarl = input('DIGITE A POSIÇÃO DE CARL SEPARANDO POR PONTO E VIRGULA (EXEMPLO: 1;1): ')  
@@ -38,7 +34,9 @@ def configuracao_personalizada():
     a.caminho()
 
     caminho = it.caminho_final()
-    it.animacao_final(matriz,  caminho)
+
+    vetPosicoes = [posCarl, posDaryl, posGlen, posMaggie, saida]
+    it.animacao_final(matriz, caminho, vetPosicoes)
 
 def configuracao_inicial():
 
