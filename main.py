@@ -38,14 +38,12 @@ def configuracao_personalizada():
     vetPosicoes = [posCarl, posDaryl, posGlen, posMaggie, saida]
     it.animacao_final(matriz, caminho, vetPosicoes)
 
-def configuracao_inicial():
 
-    print("BEM VINDO AO TESTE DO ALGORITMO A*\nSELECIONE O QUAL CONFIGURAÇÃO DESEJA FAZER:")
-    escolha = int(input('SELECIONE 1 PARA USAR A CONFIGURAÇÃO PADRÃO OU 2 PARA SUA PRÓPRIA CONFIGURAÇÃO: '))
+print("BEM VINDO AO TESTE DO ALGORITMO A*\nSELECIONE QUAL CONFIGURAÇÃO DESEJA FAZER:")
+escolha = int(input('SELECIONE 1 PARA USAR A CONFIGURAÇÃO PADRÃO OU 2 PARA SUA PRÓPRIA CONFIGURAÇÃO: '))
 
-    if escolha == 1:
-        configuracao_padrao()
-    else: 
-        configuracao_personalizada()
+if escolha == 1:
+    configuracao_padrao()
+else: 
+    configuracao_personalizada()
 
-configuracao_inicial()

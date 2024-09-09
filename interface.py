@@ -16,6 +16,7 @@ def animacao_final(matriz, posicoes_finais, vetPosicoes):
 
     tela = pygame.display.set_mode((largura_janela, altura_janela))
     pygame.display.set_caption("Animação final do caminho encontrado")
+
     fonte = pygame.font.SysFont(None, 36)
     cor_texto = (0, 0, 0)
 
@@ -23,8 +24,8 @@ def animacao_final(matriz, posicoes_finais, vetPosicoes):
     
     desenhar_matriz(linhas, colunas, tela, dimensao_celula, matriz)
     
-    for coord in coordenadas_pretas:
-        linha, coluna = coord
+    for cord in coordenadas_pretas:
+        linha, coluna = cord
         pygame.draw.rect(tela, (0, 0, 0), pygame.Rect(coluna * dimensao_celula, linha * dimensao_celula, dimensao_celula, dimensao_celula))
 
     texto_custo_final = fonte.render(f'Custo final = {custo_final}', True, cor_texto)
@@ -85,10 +86,6 @@ def valor_para_cor(valor):
         return (0, 0, 139)
     else:
         return (255, 255, 255)
-
-def desenhar_label(tela, fonte, cor_texto, informacao):
-    texto = fonte.render(informacao, True, cor_texto)
-    tela.blit(texto, (10, 10)) 
 
 def caminho_final():
     caminho_final = []
